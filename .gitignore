@@ -1,0 +1,7 @@
+#Ignore chache file
+.cache__/
+
+#Ignore data files
+coinchecker.csv
+images/
+whitepapers/
