@@ -40,3 +40,11 @@ def download_whitepaper(coin):
         return whitepaper_name            
     else:
         return ""
+
+def printSuccessMsg(msg):
+    print("*************************************************")
+    print("*****" + msg + "*****")
+    print("*************************************************")
+
+def printProcessMsg(msg):
+    print(msg + ".......")

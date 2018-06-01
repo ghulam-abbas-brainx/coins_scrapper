@@ -10,8 +10,15 @@ try:
     class AppURLopener(urllib.request.FancyURLopener):
         version = "Mozilla/5.0"
     app_url_opener = AppURLopener()
+
+    #Getting Response from coins API
+    utilites.printProcessMsg("Fetching data from coins API response")
     coins_api_response = app_url_opener.open(coinsApi)
+    utilites.printSuccessMsg("Successfully got response from coins API")
+
+    #Load JSON
     data = json.load(coins_api_response)
+
 except HTTPError as e:
     print(e)
 except URLError:
@@ -27,6 +34,7 @@ else:
     #Retrieve and store data to data dictionary
     for element in data[:5]:
         coin_resource_api = coin_resource_api_start_url + element["id"] + ".json"
+        print("Fetching Record for " + element["name"] + ".....")
         coin_rs_api_response = app_url_opener.open(coin_resource_api)
         coin_resource = json.load(coin_rs_api_response)
 
@@ -54,7 +62,10 @@ else:
 
         #Add Coin to dictionary of coins(market_overview)
         market_overview.append(coin_info)
+    utilites.printSuccessMsg("Finished fetching records for all coins")
     app_url_opener.close()
 
+    utilites.printProcessMsg("Saving record into the CSV file")
     #Saving coins into CSV file
     utilites.write_to_CSV(market_overview)
+    utilites.printSuccessMsg("Finished saving record into CSV file")
