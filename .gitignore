@@ -4,11 +4,14 @@ __pycache__
 
 #Ignore .VS Code files
 .vscode
+.temp/
 
 #Ignore .gitignore.save
 .gitignore.save
 
 #Ignore data files
-coinsInformation.csv
 images/
 whitepapers/
+imagedown.py
+soban.py
+coins_information.csv
