@@ -9,8 +9,8 @@ sitName = "https://coincheckup.com/"
 try:
     class AppURLopener(urllib.request.FancyURLopener):
         version = "Mozilla/5.0"
-    opener = AppURLopener()
-    coins_api_response = opener.open(coinsApi)
+    app_url_opener = AppURLopener()
+    coins_api_response = app_url_opener.open(coinsApi)
     data = json.load(coins_api_response)
 except HTTPError as e:
     print(e)
@@ -22,43 +22,27 @@ else:
     coin_resource_api_start_url = "https://coincheckup.com/data/prod/201805292233/assets/"
 
     #Define appropriate variables
-    coin_id = ""
-    coin_name = ""
-    coin_symbol = ""
-    coin_img = ""
-    website_url = ""
-    whitepaper_url = "" 
+    coin_id = coin_name = coin_symbol = coin_img = website_url = whitepaper_url = "" 
 
     #Retrieve and store data to data dictionary
     for element in data[:5]:
         coin_resource_api = coin_resource_api_start_url + element["id"] + ".json"
-        coin_rs_api_response = opener.open(coin_resource_api)
+        coin_rs_api_response = app_url_opener.open(coin_resource_api)
         coin_resource = json.load(coin_rs_api_response)
-        if (element["id"] == None):
-            coin_id = ""
-        else:
-            coin_id = element["id"]
-        if (element["name"] == None):
-            coin_name = ""
-        else:
-            coin_name = element["name"]
-        if (element["symbol"] == None):
-            coin_symbol = ""
-        else:
-            coin_symbol = element["symbol"]
-        if (coin_id == "" or coin_resource["logos"]["logo"] == None):
-            coin_img = ""
-        else:
-            coin_img = sitName + "/images/coins/" + element["id"] + "-" + coin_resource["logos"]["logo"] + ".png"
-        if (coin_resource["research"]["website_url"] == None):
-            website_url = ""
-        else:
-            website_url = coin_resource["research"]["website_url"]
-        if (coin_resource["research"]["whitepaper_url"] == None):
-            whitepaper_url = ""
-        else:
-            whitepaper_url = coin_resource["research"]["whitepaper_url"]
 
+        coin_id = "" if  (element["id"] == None) else element["id"]
+
+        coin_name = "" if (element["name"] == None) else element["name"]
+
+        coin_symbol = "" if (element["symbol"] == None) else element["symbol"]
+
+        coin_img = "" if (coin_id == "" or coin_resource["logos"]["logo"] == None) else sitName + "images/coins/" + element["id"] + "-" + coin_resource["logos"]["logo"] + ".png"
+        
+        website_url = "" if (coin_resource["research"]["website_url"] == None) else coin_resource["research"]["website_url"]
+        
+        whitepaper_url = "" if (coin_resource["research"]["whitepaper_url"] == None) else coin_resource["research"]["whitepaper_url"]
+        
+        #Populate Coin
         coin_info = {
         "id": coin_id,
         "name": coin_name,
@@ -67,6 +51,10 @@ else:
         "website_url" : website_url,
         "whitepaper_url" : whitepaper_url,
         }
+
+        #Add Coin to dictionary of coins(market_overview)
         market_overview.append(coin_info)
-    opener.close()
+    app_url_opener.close()
+
+    #Saving coins into CSV file
     utilites.write_to_CSV(market_overview)
