@@ -1,7 +1,14 @@
 #Ignore chache file
-.cache__/
+.cache/
+__pycache__
+
+#Ignore .VS Code files
+.vscode
+
+#Ignore .gitignore.save
+.gitignore.save
 
 #Ignore data files
-coinchecker.csv
+coinsInformation.csv
 images/
 whitepapers/
